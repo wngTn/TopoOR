@@ -1,0 +1,90 @@
+.relations {
+  --muted: #5b687b;
+  --relation-blue: #4d8ec6;
+  --relation-green: #489e8c;
+  --relation-purple: #9870b8;
+  max-width: 940px;
+  margin-inline: auto;
+}
+.relations[data-model='graph'], [data-relation-model='graph'] {
+  --model-soft: #eaf3fc; --model-border: #c6d9eb; --model-accent: #36658b;
+}
+.relations[data-model='hypergraph'], [data-relation-model='hypergraph'] {
+  --model-soft: #eaf6ef; --model-border: #c4dfce; --model-accent: #386d58;
+}
+.relations[data-model='simplicial'], [data-relation-model='simplicial'] {
+  --model-soft: #fff1e5; --model-border: #ead1bc; --model-accent: #96562e;
+}
+.relations[data-model='combinatorial'], [data-relation-model='combinatorial'] {
+  --model-soft: #f2edfa; --model-border: #d9cdec; --model-accent: #75529a;
+}
+[data-theme='dark'] .relations {
+  --muted: #9aaac1;
+  --relation-blue: #87b5e2;
+  --relation-green: #73c6b2;
+  --relation-purple: #bd9bdf;
+}
+[data-theme='dark'] :is(.relations[data-model='graph'], [data-relation-model='graph']) {
+  --model-soft: #203348; --model-border: #385875; --model-accent: #9cc5ea;
+}
+[data-theme='dark'] :is(.relations[data-model='hypergraph'], [data-relation-model='hypergraph']) {
+  --model-soft: #213b34; --model-border: #3d6152; --model-accent: #9fd4b8;
+}
+[data-theme='dark'] :is(.relations[data-model='simplicial'], [data-relation-model='simplicial']) {
+  --model-soft: #3d3029; --model-border: #73533f; --model-accent: #eac0a0;
+}
+[data-theme='dark'] :is(.relations[data-model='combinatorial'], [data-relation-model='combinatorial']) {
+  --model-soft: #332d45; --model-border: #615079; --model-accent: #c9b3e8;
+}
+.relation-models { display: none; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 14px; }
+.relations-ready .relation-models { display: grid; }
+.relation-models button { min-width: 0; padding: 12px 8px; border: 1px solid var(--model-border); border-radius: 9px; color: var(--body); background: var(--model-soft); line-height: 1.4; text-align: center; }
+.relation-models span { display: block; font-size: 13px; font-weight: 600; }
+.relation-models small { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
+.relation-models button:hover { border-color: var(--model-accent); }
+.relation-models button[aria-pressed='true'] { border-color: var(--model-accent); box-shadow: inset 0 -2px var(--model-accent); color: var(--ink); }
+.relation-example { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; gap: 26px; padding: 22px; border: 1px solid var(--model-border); border-radius: 14px; background: linear-gradient(145deg, var(--model-soft), var(--surface) 70%); }
+.relation-canvas { min-width: 0; }
+#relation-diagram { display: block; width: 100%; height: auto; overflow: visible; }
+.relation-edge { fill: none; stroke: var(--muted); stroke-width: 2.5; stroke-linecap: round; pointer-events: none; }
+.relation-cell { fill: var(--relation-color); fill-opacity: .13; stroke: var(--relation-color); stroke-width: 2; pointer-events: none; }
+.relation-node { cursor: pointer; outline: none; -webkit-tap-highlight-color: transparent; }
+.relation-hit { fill: transparent; stroke: none; pointer-events: all; }
+.relation-node-mark { fill: var(--surface); stroke: var(--muted); stroke-width: 1.8; pointer-events: none; }
+.relation-node text { fill: var(--ink); font: 600 17px var(--font); text-anchor: middle; dominant-baseline: central; pointer-events: none; user-select: none; }
+.relation-rank { fill: var(--muted); font: 500 13px var(--font); pointer-events: none; }
+.relation-cell, .relation-edge, .relation-node { transition: opacity .16s ease; }
+.has-selection .relation-cell:not(.is-active), .has-selection .relation-edge:not(.is-active) { opacity: .16; }
+.has-selection .relation-node:not(.is-active) { opacity: .4; }
+.relation-edge.is-active { stroke: var(--model-accent); stroke-width: 4; }
+.relation-cell.is-active { fill-opacity: .24; stroke-width: 3; }
+.relation-node.is-active .relation-node-mark { fill: var(--model-soft); stroke: var(--model-accent); stroke-width: 2.5; }
+.relation-node.is-selected .relation-node-mark { fill: var(--model-accent); }
+.relation-node.is-selected text { fill: var(--surface); }
+.relation-node:focus-visible .relation-node-mark { stroke: var(--ink); stroke-width: 4; }
+.relation-explanation h3 { margin-bottom: 9px; font-size: 22px; }
+#relation-model-description { min-height: 100px; font-size: 15px; line-height: 1.65; }
+.relation-hint { display: none; margin-top: 16px; font-size: 12px; color: var(--muted); }
+.relations-ready .relation-hint { display: block; }
+#relation-selection { min-height: 63px; margin-top: 10px; font-size: 13px; line-height: 1.6; color: var(--model-accent); }
+.relation-reference { margin-top: 16px; color: var(--muted); font-size: 12px; text-align: center; }
+@media (max-width: 600px) {
+  .relation-models { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-bottom: 10px; }
+  .relation-models button { min-height: 67px; padding: 9px 5px; }
+  .relation-models span { font-size: 12px; }
+  .relation-models small { margin-top: 3px; font-size: 10px; }
+  .relation-example { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 12px; }
+  .relation-hit { r: 37px; }
+  .relation-explanation { padding-inline: 4px; text-align: center; }
+  .relation-explanation h3 { font-size: 19px; margin-bottom: 6px; }
+  #relation-model-description { min-height: 70px; font-size: 14px; }
+  .relation-hint { margin-top: 10px; }
+  #relation-selection { min-height: 58px; margin-top: 6px; font-size: 12px; }
+  .relation-reference { font-size: 12px; text-align: left; }
+}
+@media (max-width: 360px) {
+  #relation-model-description { min-height: 93px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .relation-cell, .relation-edge, .relation-node { transition: none; }
+}

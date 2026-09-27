@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+.venv/
+.env
+.ruff_cache/
+
+# Editors
+.idea/
+.vscode/
+
+# Run outputs
+/logs/
+output/
+
+# Released runs
+checkpoints/*
+!checkpoints/workflow_recognition/
+!checkpoints/relation_prediction/
+checkpoints/**/*.ckpt
+checkpoints/**/*.log
+checkpoints/*/test/
+checkpoints/*/val/
+
+# Data and binaries
+/data/*
+*.bak
+**/*.pth
+**/*.pt
+**/*.pkl
+*.h5
+*.tar
+*.tar.gz

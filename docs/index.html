@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fafbfd">
+  <meta name="description"
+    content="TopoOR represents the operating room as a multimodal combinatorial complex. A MICCAI 2026 research project on higher-order surgical scene understanding.">
+  <meta name="author" content="Tony Danjun Wang, Ka Young Kim, Tolga Birdal, Nassir Navab, Lennart Bastian">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="TopoOR — A Unified Topological Scene Representation for the Operating Room">
+  <meta property="og:description" content="Higher-order representations for surgical scene understanding. MICCAI 2026.">
+  <title>TopoOR — A Unified Topological Scene Representation for the Operating Room</title>
+  <link rel="icon" href="static/images/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="static/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="static/js/theme.js"></script>
+  <link rel="stylesheet" href="static/css/site.css?v=20260928-relations">
+  <link rel="stylesheet" href="static/css/relations.css?v=20260928-2">
+  <script src="static/js/site.js?v=20260928-mobile" defer></script>
+  <script src="static/js/figures.js?v=20260927-lazy" defer></script>
+  <script src="static/js/relations.js?v=20260928-5" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-shell">
+    <header class="masthead">
+      <a class="wordmark" href="#main" aria-label="TopoOR home">Topo<span>OR</span></a>
+      <nav aria-label="Page navigation">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#citation">Citation</a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch color theme" hidden><svg
+            class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            aria-hidden="true">
+            <path d="M20 15.3A8.5 8.5 0 0 1 8.7 4a8.5 8.5 0 1 0 11.3 11.3Z" />
+          </svg><svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="3.7" />
+            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+          </svg></button>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero" aria-labelledby="paper-title">
+        <div class="publication-line">
+          <span>MICCAI 2026</span>
+          <span class="award-distinction"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8" r="5" />
+              <path d="m8.5 12-1 9 4.5-2.5 4.5 2.5-1-9" />
+            </svg>Nominated for Best Paper Award</span>
+        </div>
+        <h1 id="paper-title"><span class="title-main"><span class="project-name">Topo<span>OR</span></span>: A Unified
+            Topological<br class="title-break"> Scene Representation</span><span class="title-sub">for the Operating
+            Room</span></h1>
+        <div class="paper-details">
+          <div class="people">
+            <div class="authors">
+              <div class="author"><a href="https://wngtn.github.io/" target="_blank" rel="noopener noreferrer"><img
+                    class="author-portrait" src="static/images/authors/wang.png" width="88" height="88" alt=""
+                    decoding="async"><span>Tony Danjun Wang<sup>1,2</sup></span></a></div>
+              <div class="author"><a href="https://www.linkedin.com/in/ka-young-%E2%80%8Dkim-37605b263/" target="_blank"
+                  rel="noopener noreferrer"><img class="author-portrait" src="static/images/authors/kim.jpg" width="88"
+                    height="88" alt="" decoding="async"><span>Ka Young Kim<sup>4</sup></span></a></div>
+              <div class="author"><a href="https://tolgabirdal.github.io/" target="_blank"
+                  rel="noopener noreferrer"><img class="author-portrait" src="static/images/authors/birdal.webp"
+                    width="88" height="88" alt="" decoding="async"><span>Tolga Birdal<sup>3</sup></span></a></div>
+              <div class="author"><a href="https://www.professoren.tum.de/en/navab-nassir" target="_blank"
+                  rel="noopener noreferrer"><img class="author-portrait" src="static/images/authors/navab.jpg"
+                    width="88" height="88" alt="" decoding="async"><span>Nassir Navab<sup>1,2</sup></span></a></div>
+              <div class="author"><a href="https://bastianlb.github.io/" target="_blank" rel="noopener noreferrer"><img
+                    class="author-portrait" src="static/images/authors/bastian.png" width="88" height="88" alt=""
+                    decoding="async"><span>Lennart Bastian<sup>1,2,3</sup></span></a></div>
+            </div>
+            <p class="affiliations"><span><sup>1</sup> Technical University of Munich</span><span><sup>2</sup> Munich
+                Center for Machine Learning</span><span><sup>3</sup> Imperial College London</span><span><sup>4</sup>
+                Kyung Hee University</span></p>
+          </div>
+          <div class="resources" aria-label="Publication resources">
+            <a class="resource-button arxiv-button" href="https://arxiv.org/abs/2603.09466" target="_blank"
+              rel="noopener noreferrer"><img src="static/images/arxiv-logomark.svg" width="15" height="20" alt="">
+              arXiv</a>
+            <a class="resource-button" href="https://papers.miccai.org/miccai-2026/1068-Paper2412.html" target="_blank"
+              rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                aria-hidden="true">
+                <path d="M12 5C9 3 5 3 2 4v15c3-1 7-1 10 1 3-2 7-2 10-1V4c-3-1-7-1-10 1Zm0 0v15" />
+              </svg> MICCAI 2026</a>
+            <a class="resource-button code-button" href="https://github.com/wngTn/TopoOR" target="_blank"
+              rel="noopener noreferrer" aria-label="TopoOR code on GitHub"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <path d="m8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16" />
+              </svg> Code</a>
+          </div>
+        </div>
+        <figure class="teaser">
+          <div class="video-frame" id="teaser-player">
+            <video id="teaser-video" controls muted loop playsinline preload="auto"
+              poster="static/images/teaser-poster.jpg" width="1280" height="720"
+              aria-label="TopoOR teaser: a three-dimensional operating-room scene with human poses, objects, and their relations"
+              aria-describedby="teaser-caption">
+              <source src="static/video/teaser.mp4?v=720p30" type="video/mp4">
+              <a href="static/video/teaser.mp4?v=720p30" target="_blank" rel="noopener noreferrer">Download the TopoOR
+                teaser
+                video</a>.
+            </video>
+            <button class="video-start" id="video-start" type="button" aria-label="Play TopoOR teaser" hidden><svg
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9 5 11 7-11 7z" fill="currentColor" />
+              </svg></button>
+            <div class="video-controls" id="video-controls" hidden>
+              <button class="player-button" id="video-toggle" type="button" aria-label="Play teaser"><svg
+                  class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m8 5 11 7-11 7z" fill="currentColor" />
+                </svg><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 5h4v14H6zm8 0h4v14h-4z" fill="currentColor" />
+                </svg></button>
+              <span class="video-time" id="video-time">0:00</span>
+              <input id="video-seek" type="range" min="0" max="45" step="0.1" value="0" aria-label="Video position"
+                aria-valuetext="0 seconds of 45 seconds">
+              <span class="video-duration" id="video-duration">0:45</span>
+              <button class="player-button" id="video-fullscreen" type="button" aria-label="Enter video fullscreen"><svg
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                  <path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" />
+                </svg></button>
+            </div>
+          </div>
+          <figcaption id="teaser-caption">
+            <span class="caption-title">The Surgical Operating Room as Multi-Modal Topological Complex.</span>
+            <span class="caption-description">Illustration shows estimated human poses and objects (of one time step)
+              that form the physical entities of the TopoOR representation.</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="introduction" id="overview" aria-labelledby="intro-title">
+        <h2 id="intro-title">Modeling Complex Multi-Modal Surgical Interactions</h2>
+        <div class="prose">
+          <p>Surgical actions depend on coordination among people, instruments, and equipment. We introduce TopoOR, the
+            first application of topological deep learning to multimodal scene networks, to explicitly model these
+            interactions. For robot-assisted surgery, for instance, this means modeling the surgeon, robot, saw, and
+            patient as one interacting group.</p>
+          <p>TopoOR organizes these groups and their constituent entities into a <em>combinatorial complex</em>,
+            combining human poses and object locations with sensor data from cameras, medical devices (e.g., robots),
+            and microphones.
+            Higher-order attention exchanges information between individual entities and the groups they participate in,
+            with temporal links connecting the scene across frames.</p>
+        </div>
+      </section>
+
+      <section class="section relations" id="relations" data-model="graph" aria-labelledby="relations-title">
+        <div class="section-heading">
+          <h2 id="relations-title">How to Represent Relations</h2>
+        </div>
+        <div class="relation-models" role="group" aria-label="Choose a relation structure">
+          <button type="button" data-relation-model="graph" aria-pressed="true" aria-controls="relation-example">
+            <span>Graph</span><small>Pairs</small>
+          </button>
+          <button type="button" data-relation-model="hypergraph" aria-pressed="false" aria-controls="relation-example">
+            <span>Hypergraph</span><small>Groups</small>
+          </button>
+          <button type="button" data-relation-model="simplicial" aria-pressed="false" aria-controls="relation-example">
+            <span>Simplicial complex</span><small>Groups &amp; their subsets</small>
+          </button>
+          <button type="button" data-relation-model="combinatorial" aria-pressed="false"
+            aria-controls="relation-example">
+            <span>Combinatorial complex</span><small>Ranked relations · TopoOR</small>
+          </button>
+        </div>
+        <div class="relation-example" id="relation-example">
+          <div class="relation-canvas">
+            <svg id="relation-diagram" viewBox="0 0 420 280" role="group"
+              aria-label="Graph: entities connected in pairs">
+              <g class="relation-edge">
+                <path d="M80 80 40 180 145 210 210 125 80 80 M145 210 300 235 M210 125 280 60 355 160 210 125" />
+              </g>
+              <g class="relation-node">
+                <circle class="relation-node-mark" cx="80" cy="80" r="17" /><text x="80" y="80">A</text>
+              </g>
+              <g class="relation-node">
+                <circle class="relation-node-mark" cx="40" cy="180" r="17" /><text x="40" y="180">B</text>
+              </g>
+              <g class="relation-node">
+                <circle class="relation-node-mark" cx="145" cy="210" r="17" /><text x="145" y="210">C</text>
+              </g>
+              <g class="relation-node">
+                <circle class="relation-node-mark" cx="210" cy="125" r="17" /><text x="210" y="125">D</text>
+              </g>
+              <g class="relation-node">
+                <circle class="relation-node-mark" cx="280" cy="60" r="17" /><text x="280" y="60">E</text>
+              </g>
+              <g class="relation-node">
+                <circle class="relation-node-mark" cx="355" cy="160" r="17" /><text x="355" y="160">F</text>
+              </g>
+              <g class="relation-node">
+                <circle class="relation-node-mark" cx="300" cy="235" r="17" /><text x="300" y="235">G</text>
+              </g>
+            </svg>
+          </div>
+          <div class="relation-explanation">
+            <h3 id="relation-model-title">Graph</h3>
+            <p id="relation-model-description">Each edge connects two nodes.</p>
+            <p class="relation-hint">Hover or tap a node.</p>
+            <p id="relation-selection" aria-live="polite" aria-atomic="true">Edges A–B and B–C do not imply an A–C edge.
+            </p>
+          </div>
+        </div>
+        <p class="relation-reference">For a rigorous treatment of higher-order networks, we refer to
+          <a href="https://tdlbook.org/" target="_blank" rel="noopener noreferrer"><em>Topological Deep
+              Learning</em></a>.
+        </p>
+      </section>
+
+      <section class="section method" id="method" aria-labelledby="method-title">
+        <div class="section-heading">
+          <h2 id="method-title">Method Overview</h2>
+        </div>
+        <figure class="wide-figure method-explorer" id="method-explorer">
+          <div class="figure-link method-frame">
+            <div class="method-art" id="method-art">
+              <img src="static/images/methodology.svg" width="9782" height="2674" loading="lazy" decoding="async"
+                alt="TopoOR pipeline: human poses, object locations, and multimodal evidence are organized into a combinatorial complex. Higher-order attention exchanges information among entities, pairwise relations, and interaction groups. The final panel illustrates exempllary downstream tasks using this representation.">
+            </div>
+            <button type="button" class="figure-action" data-source="static/images/methodology.svg" data-figure
+              data-title="TopoOR Methodology" data-alt="TopoOR methodology, from multimodal inputs to downstream tasks"
+              aria-label="Enlarge the TopoOR methodology figure"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" />
+              </svg></button>
+          </div>
+          <div class="method-stages" aria-label="Explore methodology stages" hidden>
+            <button type="button" data-stage="I" aria-pressed="false"><span>I</span> Input</button>
+            <button type="button" data-stage="II" aria-pressed="false"><span>II</span> Perception</button>
+            <button type="button" data-stage="III" aria-pressed="false"><span>III</span> Complex</button>
+            <button type="button" data-stage="IV" aria-pressed="false"><span>IV</span> Attention</button>
+            <button type="button" data-stage="V" aria-pressed="false"><span>V</span>Tasks</button>
+          </div>
+          <figcaption id="method-description" aria-live="polite"><span class="caption-title">TopoOR
+              Representation.</span>
+            A combinatorial complex unifies individual multi-modal entities, pairwise relations, and interactions among
+            multiple participants under a single representation. Higher-order attention exchanges multimodal information
+            across this structure.</figcaption>
+        </figure>
+        <div class="method-notes">
+          <div class="structure-note">
+            <h3>A Proposed Representation</h3>
+            <dl class="ranks">
+              <div>
+                <dt>Rank 0</dt>
+                <dd>Human joints and objects (3D); evidence nodes for robot logs, monitor images, and audio.</dd>
+              </div>
+              <div>
+                <dt>Rank 1</dt>
+                <dd>Skeleton edges, proximity-based edges, and predefined links such as Technician–Robot.</dd>
+              </div>
+              <div>
+                <dt>Rank 2</dt>
+                <dd>Person cells aggregate each skeleton; functional cells group participants in a surgical interaction.
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <div class="attention-note prose">
+            <h3>Higher-Order Attention</h3>
+            <p>Each cell attends to its incident lower- and higher-rank cells. Entity features propagate toward group
+              cells, and group features propagate back to their constituents. A learned bias, indexed by the source and
+              target ranks, adjusts the attention weights.</p>
+            <p>Image features are sampled at the projected 3D node locations and fused across camera views.
+              Bidirectional temporal edges connect corresponding entities across an eight-frame window.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="results" aria-labelledby="results-title">
+        <div class="section-heading">
+          <h2 id="results-title">Results on MM-OR</h2>
+        </div>
+        <p class="section-intro">We evaluate next-action anticipation, robot-phase prediction, sterility-breach
+          detection, and scene-graph relation prediction using the standard train and test splits of the <a
+            href="https://arxiv.org/abs/2503.02579" target="_blank" rel="noopener noreferrer">MM-OR dataset</a>. All
+          scores are macro-F1 on a 0–100 scale; higher is better.</p>
+        <div class="table-block">
+          <div class="table-scroll" role="region" aria-labelledby="table-1-caption" tabindex="0">
+            <table aria-describedby="sterility-note">
+              <caption id="table-1-caption"><span class="table-number">Table 1</span> Downstream Task Performance
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Method</th>
+                  <th scope="col">Sterility Breach<sup aria-label="See footnote">†</sup> <span
+                      aria-hidden="true">↑</span></th>
+                  <th scope="col">Next Action <span aria-hidden="true">↑</span></th>
+                  <th scope="col">Robot Phase <span aria-hidden="true">↑</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="group-row">
+                  <th colspan="4" scope="rowgroup">LLM-Based</th>
+                </tr>
+                <tr>
+                  <th scope="row">MM2SG <span class="baseline-citation">(<a href="https://arxiv.org/abs/2503.02579"
+                        target="_blank" rel="noopener noreferrer">Özsoy et al.</a>)</span></th>
+                  <td>55.00</td>
+                  <td>35.40</td>
+                  <td>56.90</td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr class="group-row">
+                  <th colspan="4" scope="rowgroup">Latent &amp; Relational Models</th>
+                </tr>
+                <tr>
+                  <th scope="row">Vanilla Transformer <span class="baseline-citation">(<a
+                        href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">Vaswani et
+                        al.</a>)</span></th>
+                  <td><strong>76.83</strong></td>
+                  <td>34.80</td>
+                  <td>65.29</td>
+                </tr>
+                <tr>
+                  <th scope="row">SurgLatentGraph <span class="baseline-citation">(<a
+                        href="https://arxiv.org/abs/2312.06829" target="_blank" rel="noopener noreferrer">Murali et
+                        al.</a>)</span></th>
+                  <td><strong>76.83</strong></td>
+                  <td>37.46</td>
+                  <td>64.61</td>
+                </tr>
+                <tr class="ours">
+                  <th scope="row">TopoOR <span class="ours-label">(ours)</span></th>
+                  <td><strong>76.83</strong></td>
+                  <td><strong>41.10</strong></td>
+                  <td><strong>73.53</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note">Best results in bold, including ties. <span id="sterility-note">† For the Vanilla
+              Transformer, SurgLatentGraph, and TopoOR, sterility is evaluated with shared geometric rules on the
+              estimated 3D scene. This evaluation is independent of the learned action and phase predictions, yielding
+              the same sterility F1 for all three.</span></p>
+          <p class="result-reading">TopoOR improves next-action F1 by <strong>3.64 points</strong> over SurgLatentGraph
+            (<a href="https://arxiv.org/abs/2312.06829" target="_blank" rel="noopener noreferrer">Murali et al.</a>)
+            and robot-phase F1 by <strong>8.24 points</strong> over the Vanilla Transformer (<a
+              href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">Vaswani et al.</a>).
+            Sterility performance is,
+            <i>naturally</i>, tied across all three geometric methods.
+          </p>
+        </div>
+
+        <figure class="wide-figure qualitative method-explorer results-explorer" id="results-explorer">
+          <div class="figure-link method-frame">
+            <div class="method-art">
+              <img src="static/images/qualitative-results.svg" width="5030" height="1911" loading="lazy"
+                decoding="async"
+                alt="Robot-phase timelines compared with ground truth, estimated 3D operating-room entities, and diagrams showing unstructured, pairwise, and higher-order scene representations.">
+            </div>
+            <button type="button" class="figure-action" data-source="static/images/qualitative-results.svg" data-figure
+              data-title="Qualitative Results and Scene Abstraction"
+              data-alt="Robot-phase timelines, estimated 3D entities, and scene representations"
+              aria-label="Enlarge the qualitative results figure"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                <path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" />
+              </svg></button>
+          </div>
+          <div class="method-stages" aria-label="Explore qualitative results" hidden>
+            <button type="button" data-stage="I" aria-pressed="false"><span>I</span> Predictions</button>
+            <button type="button" data-stage="II" aria-pressed="false"><span>II</span> 3D Entities</button>
+            <button type="button" data-stage="III" aria-pressed="false"><span>III</span> Scene Structure</button>
+          </div>
+          <figcaption id="results-description" aria-live="polite"><span class="caption-title">Qualitative
+              Results.</span> Robot-phase predictions compared with ground truth (left), estimated 3D scene entities
+            (center), and schematic representations of the Vanilla Transformer, SurgLatentGraph, and TopoOR (right).
+          </figcaption>
+        </figure>
+
+        <div class="section-grid reduction">
+          <div class="prose">
+            <h3>Scene-Graph Relation Prediction</h3>
+            <p>A relation head trained on the full complex predicts conventional scene-graph labels, reaching
+              <strong>61.30 F1</strong> versus 52.90 for MM2SG (<a href="https://arxiv.org/abs/2503.02579"
+                target="_blank" rel="noopener noreferrer">Özsoy et al.</a>). A simple decision tree restricted to rank-0
+              spatial
+              entities reaches 43.72.
+            </p>
+          </div>
+          <div class="table-block">
+            <div class="table-scroll" role="region" aria-labelledby="table-2-caption" tabindex="0">
+              <table>
+                <caption id="table-2-caption"><span class="table-number">Table 2</span> Scene-Graph Relation Prediction
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Method</th>
+                    <th scope="col">F1 <span aria-hidden="true">↑</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">MM2SG <span class="baseline-citation">(<a href="https://arxiv.org/abs/2503.02579"
+                          target="_blank" rel="noopener noreferrer">Özsoy et al.</a>)</span></th>
+                    <td>52.90</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Ours (Decision Tree)</th>
+                    <td>43.72</td>
+                  </tr>
+                  <tr class="ours">
+                    <th scope="row">Ours (Learned Head)</th>
+                    <td><strong>61.30</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="ablation">
+          <h3>Incremental Modality Ablation</h3>
+          <p class="section-intro">Adding RGB features to objects and skeletons raises robot-phase F1 from 20.25 to
+            60.71. Adding robot logs, audio, and temporal links then raises it to 73.53. Each row adds a modality to the
+            preceding configuration.</p>
+          <div class="table-scroll" role="region" aria-labelledby="table-3-caption" tabindex="0">
+            <table class="ablation-table">
+              <caption id="table-3-caption"><span class="table-number">Table 3</span> Incremental Modality Ablation
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Object<br>Nodes</th>
+                  <th scope="col">Human<br>Skeleton</th>
+                  <th scope="col">RGB<br>Images</th>
+                  <th scope="col">Robot<br>Logs</th>
+                  <th scope="col">Audio</th>
+                  <th scope="col">Temporal<br>Links</th>
+                  <th scope="col" class="metric-start">Next Action <span aria-hidden="true">↑</span></th>
+                  <th scope="col">Robot Phase <span aria-hidden="true">↑</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td class="metric-start">25.82</td>
+                  <td>21.08</td>
+                </tr>
+                <tr>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td class="metric-start">26.26</td>
+                  <td>20.25</td>
+                </tr>
+                <tr>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td class="metric-start">36.35</td>
+                  <td>60.71</td>
+                </tr>
+                <tr>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Not included">—</td>
+                  <td aria-label="Not included">—</td>
+                  <td class="metric-start">38.26</td>
+                  <td>67.06</td>
+                </tr>
+                <tr>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Not included">—</td>
+                  <td class="metric-start">40.57</td>
+                  <td>69.63</td>
+                </tr>
+                <tr class="ours">
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td aria-label="Included">✓</td>
+                  <td class="metric-start"><strong>41.10</strong></td>
+                  <td><strong>73.53</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note">Temporal context spans eight frames.</p>
+        </div>
+      </section>
+
+      <section class="section limitations" aria-labelledby="limitations-title">
+        <div>
+          <h2 id="limitations-title">Beyond MM-OR (Limitations)</h2>
+        </div>
+        <div class="prose">
+          <p>Our experiments use MM-OR. Further evaluation across surgical tasks, procedures and hospitals would help
+            establish how well the representation transfers to new teams, equipment, and workflows.</p>
+        </div>
+      </section>
+
+      <section class="section citation" id="citation" aria-labelledby="citation-title">
+        <div class="citation-heading">
+          <div>
+            <h2 id="citation-title">Citation</h2>
+          </div><button type="button" class="copy-button" id="copy-citation" hidden>Copy BibTeX</button>
+        </div>
+        <pre tabindex="0" aria-label="BibTeX citation"><code id="bibtex">@inproceedings{wang2026topoor,
+  author    = {Wang, Tony Danjun and Kim, Ka Young and Birdal, Tolga
+               and Navab, Nassir and Bastian, Lennart},
+  title     = {{TopoOR}: A Unified Topological Scene Representation
+               for the Operating Room},
+  booktitle = {Medical Image Computing and Computer Assisted Intervention -- MICCAI 2026},
+  year      = {2026},
+  publisher = {Springer Nature Switzerland},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {16892},
+  month     = sep,
+  url       = {https://papers.miccai.org/miccai-2026/1068-Paper2412.html}
+}</code></pre>
+        <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+    <footer><a class="wordmark" href="#main">Topo<span>OR</span></a>
+      <p>MICCAI 2026</p>
+      <p class="footer-contact">For further questions, please contact <a href="mailto:tony.wang@tum.de" target="_blank"
+          rel="noopener noreferrer">tony.wang@tum.de</a>.</p>
+    </footer>
+  </div>
+  <dialog id="figure-dialog" aria-labelledby="figure-dialog-title">
+    <div class="dialog-toolbar">
+      <h2 id="figure-dialog-title">Figure</h2>
+      <div class="figure-controls">
+        <button type="button" id="figure-zoom" aria-label="Zoom into figure" aria-pressed="false">Zoom</button>
+        <button type="button" id="close-figure" aria-label="Close enlarged figure">Close <span
+            aria-hidden="true">×</span></button>
+      </div>
+    </div>
+    <p class="figure-hint">Swipe to explore. Use Fit to see the whole figure.</p>
+    <div class="dialog-image-area" tabindex="0" role="region" aria-label="Enlarged figure">
+      <img id="enlarged-figure" alt="" draggable="false">
+    </div>
+  </dialog>
+</body>
+
+</html>

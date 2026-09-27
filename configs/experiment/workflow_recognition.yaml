@@ -1,0 +1,24 @@
+# @package _global_
+
+defaults:
+  - override /data: mm_or
+  - override /model: workflow_recognition
+
+experiment_name: "workflow_recognition"
+
+logging:
+  loss_keys: [loss, NextAction_Loss, RobotPhase_Loss, aux_rp_loss]
+
+callbacks:
+  ema:
+    _target_: src.callbacks.training.EMACallback
+    decay: 0.999
+    warmup_steps: 1000
+
+trainer:
+  max_steps: 12000
+  callbacks:
+    - ${callbacks.ema}
+    - ${callbacks.progress}
+    - ${callbacks.evaluation}
+    - ${callbacks.model_checkpoint}

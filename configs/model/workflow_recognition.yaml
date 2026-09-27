@@ -1,0 +1,37 @@
+_target_: src.models.modules.workflow_recognition.WorkflowRecognitionModule
+warmup_steps: 1_000
+cell_dim: 64
+enc_dropout: 0.3
+head_dropout: 0.5
+pool_dropout: 0.3
+
+backbone:
+  _target_: src.models.backbones.CCMessagePassingTransformer
+  in_features: "${model.cell_dim}"
+  hidden_features: 64
+  out_features: 64
+  num_layers: 4
+  heads: 4
+  dropout: 0.2
+  max_rank: 2
+  max_time_steps: ${temporal_window}
+  embed_dropout: 0.3
+
+optimizer:
+  _target_: torch.optim.AdamW
+  _partial_: True
+  lr: 1e-4
+  weight_decay: 0.04
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+  _partial_: True
+  T_max: 12000
+  eta_min: 1e-5
+
+metric:
+  WorkflowRecognitionMetrics:
+    _target_: src.metrics.WorkflowRecognitionMetrics
+
+losses:
+  _target_: src.losses.WorkflowRecognitionLoss

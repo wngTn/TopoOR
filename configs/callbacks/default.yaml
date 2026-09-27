@@ -1,0 +1,13 @@
+model_checkpoint:
+  _target_: src.callbacks.checkpoint.ExperimentCheckpoint
+  dirpath: ${paths.output_dir}/checkpoints
+  every_n_train_steps: 2000
+
+progress:
+  _target_: src.callbacks.training.TrainingProgress
+  log_every_n_steps: ${logging.log_every_n_steps}
+  loss_keys: ${logging.loss_keys}
+
+evaluation:
+  _target_: src.callbacks.evaluation.EvaluationArtifacts
+  directory: ${paths.output_dir}

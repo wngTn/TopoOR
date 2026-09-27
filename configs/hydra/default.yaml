@@ -1,0 +1,6 @@
+defaults:
+  - override job_logging: none
+
+run:
+  dir: ${experiment_dir:${paths.log_dir},${experiment_name},${logging.existing_experiment_policy}}
+output_subdir: ${experiment_metadata:${hydra.runtime.output_dir}}

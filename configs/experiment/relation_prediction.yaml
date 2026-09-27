@@ -1,0 +1,10 @@
+# @package _global_
+
+defaults:
+  - override /data: mm_or
+  - override /model: relation_prediction
+
+experiment_name: "relation_prediction"
+
+trainer:
+  max_steps: 24000

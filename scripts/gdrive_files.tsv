@@ -1,0 +1,7 @@
+16SvdzgSGoEh230gQpxKUv7OOQYbnIb9L	checkpoints/workflow_recognition/checkpoints/latest_step_012000.ckpt
+1m6UgFqGyfcd_pZApeQPpTavDrTWfcMPc	checkpoints/relation_prediction/checkpoints/latest_step_024000.ckpt
+1rV_nEmcTZiIEWv98Q9fUfH_wKnpUR_aS	data/perception/audio_embeddings.pkl
+1x4_hR3vbFZd8Gzbsi4sGtNk0VBlYL0d4	data/perception/bounding_boxes.pkl
+1pJ8gUYVwrVGF8GSuZfvShiWQNjJdlndQ	data/perception/human_poses.pkl
+1264K1_cH1J6lhiU-2yiSG1KoVRAciGhY	data/perception/json_embeddings.pkl
+1K0-2N6B4khpnBZcjAPafN7zKYCpPc6Gk	data/perception/text_embeddings.pkl

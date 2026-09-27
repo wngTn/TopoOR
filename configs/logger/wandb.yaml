@@ -1,0 +1,5 @@
+_target_: lightning.pytorch.loggers.WandbLogger
+
+save_dir: ${paths.output_dir}
+project: TopoOR
+name: ${experiment_name}

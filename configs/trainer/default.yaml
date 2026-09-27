@@ -1,0 +1,17 @@
+_target_: lightning.pytorch.Trainer
+default_root_dir: ${paths.output_dir}
+val_check_interval: 2000
+check_val_every_n_epoch: null
+log_every_n_steps: ${logging.log_every_n_steps}
+accelerator: gpu
+devices: 1
+precision: "32-true"
+gradient_clip_val: 1.1
+enable_progress_bar: false
+enable_model_summary: false
+plugins:
+  - _target_: src.utils.experiment.AtomicCheckpointIO
+callbacks:
+  - ${callbacks.progress}
+  - ${callbacks.evaluation}
+  - ${callbacks.model_checkpoint}

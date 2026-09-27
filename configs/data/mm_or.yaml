@@ -1,0 +1,56 @@
+_target_: src.data.datamodule.DataModule
+
+train_cfg:
+    sampler:
+        _target_: src.data.datamodule.EpochSeededSampler
+        _partial_: true
+        seed: ${seed}
+
+    loader_params:
+        batch_size: 8
+        num_workers: 12
+        pin_memory: True
+        persistent_workers: True
+
+    dataset:
+        _target_: src.data.datasets.mm_or_dataset.MMORDataset
+        _partial_: True
+        data_dir: "./data/mm_or"
+        temporal_window: ${temporal_window}
+        # Apply rigid augmentation once, in world coordinates before graph construction.
+        rigid_aug_rotation_deg: 20.0
+        rigid_aug_translation_mm: 150.0
+        augmentation:
+            person_dropout_p: 0.2
+            node_dropout_p: 0.15
+        sequences: [
+            "001_PKA",
+            "003_TKA",
+            "006_PKA",
+            "008_PKA",
+            "010_PKA",
+            "013_PKA",
+            "014_PKA",
+            "033_PKA",
+            "035_PKA",
+            "037_TKA",
+        ]
+
+val_cfg:
+    loader_params:
+        batch_size: 8
+        num_workers: 8
+        pin_memory: True
+        persistent_workers: True
+
+    dataset:
+        _target_: src.data.datasets.mm_or_dataset.MMORDataset
+        _partial_: True
+        data_dir: "./data/mm_or"
+        temporal_window: ${temporal_window}
+        sequences: [
+            "004_PKA",
+            "011_TKA",
+            "036_PKA",
+            "038_TKA",
+        ]

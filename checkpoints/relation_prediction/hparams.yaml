@@ -1,0 +1,134 @@
+experiment_name: relation_prediction
+ckpt_path: null
+seed: 925
+temporal_window: 8
+data:
+  _target_: src.data.datamodule.DataModule
+  train_cfg:
+    sampler:
+      _target_: src.data.datamodule.EpochSeededSampler
+      _partial_: true
+      seed: 925
+    loader_params:
+      batch_size: 8
+      num_workers: 12
+      pin_memory: true
+      persistent_workers: true
+    dataset:
+      _target_: src.data.datasets.mm_or_dataset.MMORDataset
+      _partial_: true
+      data_dir: ./data/mm_or
+      temporal_window: 8
+      rigid_aug_rotation_deg: 20.0
+      rigid_aug_translation_mm: 150.0
+      augmentation:
+        person_dropout_p: 0.2
+        node_dropout_p: 0.15
+      sequences:
+      - 001_PKA
+      - 003_TKA
+      - 006_PKA
+      - 008_PKA
+      - 010_PKA
+      - 013_PKA
+      - 014_PKA
+      - 033_PKA
+      - 035_PKA
+      - 037_TKA
+  val_cfg:
+    loader_params:
+      batch_size: 8
+      num_workers: 8
+      pin_memory: true
+      persistent_workers: true
+    dataset:
+      _target_: src.data.datasets.mm_or_dataset.MMORDataset
+      _partial_: true
+      data_dir: ./data/mm_or
+      temporal_window: 8
+      sequences:
+      - 004_PKA
+      - 011_TKA
+      - 036_PKA
+      - 038_TKA
+model:
+  _target_: src.models.modules.relation_prediction.RelationPredictionModule
+  cell_dim: 256
+  backbone:
+    _target_: src.models.backbones.CCMessagePassingTransformer
+    in_features: 256
+    hidden_features: 256
+    out_features: 256
+    num_layers: 2
+    heads: 8
+    dropout: 0.1
+    max_rank: 3
+    max_time_steps: 8
+    embed_dropout: 0.1
+  optimizer:
+    _target_: torch.optim.Adam
+    _partial_: true
+    lr: 0.0001
+    weight_decay: 0.0
+  scheduler:
+    _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+    _partial_: true
+    T_max: 60000
+    eta_min: 1.0e-06
+  metric:
+    RelationPredictionMetrics:
+      _target_: src.metrics.RelationPredictionMetrics
+  losses:
+    _target_: src.losses.RelationPredictionLoss
+logger:
+  _target_: lightning.pytorch.loggers.WandbLogger
+  save_dir: checkpoints/relation_prediction
+  project: TopoOR
+  name: relation_prediction
+trainer:
+  _target_: lightning.pytorch.Trainer
+  default_root_dir: checkpoints/relation_prediction
+  val_check_interval: 2000
+  check_val_every_n_epoch: null
+  log_every_n_steps: 50
+  accelerator: gpu
+  devices: 1
+  precision: 32-true
+  gradient_clip_val: 1.1
+  enable_progress_bar: false
+  enable_model_summary: false
+  plugins:
+  - _target_: src.utils.experiment.AtomicCheckpointIO
+  callbacks:
+  - _target_: src.callbacks.training.TrainingProgress
+    log_every_n_steps: 50
+    loss_keys:
+    - loss
+  - _target_: src.callbacks.evaluation.EvaluationArtifacts
+    directory: checkpoints/relation_prediction
+  - _target_: src.callbacks.checkpoint.ExperimentCheckpoint
+    dirpath: checkpoints/relation_prediction/checkpoints
+    every_n_train_steps: 2000
+  max_steps: 24000
+paths:
+  root_dir: .
+  log_dir: ./logs/
+  output_dir: checkpoints/relation_prediction
+logging:
+  existing_experiment_policy: error
+  log_every_n_steps: 50
+  loss_keys:
+  - loss
+callbacks:
+  model_checkpoint:
+    _target_: src.callbacks.checkpoint.ExperimentCheckpoint
+    dirpath: checkpoints/relation_prediction/checkpoints
+    every_n_train_steps: 2000
+  progress:
+    _target_: src.callbacks.training.TrainingProgress
+    log_every_n_steps: 50
+    loss_keys:
+    - loss
+  evaluation:
+    _target_: src.callbacks.evaluation.EvaluationArtifacts
+    directory: checkpoints/relation_prediction

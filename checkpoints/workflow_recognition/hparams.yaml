@@ -1,0 +1,154 @@
+experiment_name: workflow_recognition
+ckpt_path: null
+seed: 925
+temporal_window: 8
+data:
+  _target_: src.data.datamodule.DataModule
+  train_cfg:
+    sampler:
+      _target_: src.data.datamodule.EpochSeededSampler
+      _partial_: true
+      seed: 925
+    loader_params:
+      batch_size: 8
+      num_workers: 12
+      pin_memory: true
+      persistent_workers: true
+    dataset:
+      _target_: src.data.datasets.mm_or_dataset.MMORDataset
+      _partial_: true
+      data_dir: ./data/mm_or
+      temporal_window: 8
+      rigid_aug_rotation_deg: 20.0
+      rigid_aug_translation_mm: 150.0
+      augmentation:
+        person_dropout_p: 0.2
+        node_dropout_p: 0.15
+      sequences:
+      - 001_PKA
+      - 003_TKA
+      - 006_PKA
+      - 008_PKA
+      - 010_PKA
+      - 013_PKA
+      - 014_PKA
+      - 033_PKA
+      - 035_PKA
+      - 037_TKA
+  val_cfg:
+    loader_params:
+      batch_size: 8
+      num_workers: 8
+      pin_memory: true
+      persistent_workers: true
+    dataset:
+      _target_: src.data.datasets.mm_or_dataset.MMORDataset
+      _partial_: true
+      data_dir: ./data/mm_or
+      temporal_window: 8
+      sequences:
+      - 004_PKA
+      - 011_TKA
+      - 036_PKA
+      - 038_TKA
+model:
+  _target_: src.models.modules.workflow_recognition.WorkflowRecognitionModule
+  warmup_steps: 1000
+  cell_dim: 64
+  enc_dropout: 0.3
+  head_dropout: 0.5
+  pool_dropout: 0.3
+  backbone:
+    _target_: src.models.backbones.CCMessagePassingTransformer
+    in_features: 64
+    hidden_features: 64
+    out_features: 64
+    num_layers: 4
+    heads: 4
+    dropout: 0.2
+    max_rank: 2
+    max_time_steps: 8
+    embed_dropout: 0.3
+  optimizer:
+    _target_: torch.optim.AdamW
+    _partial_: true
+    lr: 0.0001
+    weight_decay: 0.04
+  scheduler:
+    _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+    _partial_: true
+    T_max: 12000
+    eta_min: 1.0e-05
+  metric:
+    WorkflowRecognitionMetrics:
+      _target_: src.metrics.WorkflowRecognitionMetrics
+  losses:
+    _target_: src.losses.WorkflowRecognitionLoss
+logger:
+  _target_: lightning.pytorch.loggers.WandbLogger
+  save_dir: checkpoints/workflow_recognition
+  project: TopoOR
+  name: workflow_recognition
+trainer:
+  _target_: lightning.pytorch.Trainer
+  default_root_dir: checkpoints/workflow_recognition
+  val_check_interval: 2000
+  check_val_every_n_epoch: null
+  log_every_n_steps: 50
+  accelerator: gpu
+  devices: 1
+  precision: 32-true
+  gradient_clip_val: 1.1
+  enable_progress_bar: false
+  enable_model_summary: false
+  plugins:
+  - _target_: src.utils.experiment.AtomicCheckpointIO
+  callbacks:
+  - _target_: src.callbacks.training.EMACallback
+    decay: 0.999
+    warmup_steps: 1000
+  - _target_: src.callbacks.training.TrainingProgress
+    log_every_n_steps: 50
+    loss_keys:
+    - loss
+    - NextAction_Loss
+    - RobotPhase_Loss
+    - aux_rp_loss
+  - _target_: src.callbacks.evaluation.EvaluationArtifacts
+    directory: checkpoints/workflow_recognition
+  - _target_: src.callbacks.checkpoint.ExperimentCheckpoint
+    dirpath: checkpoints/workflow_recognition/checkpoints
+    every_n_train_steps: 2000
+  max_steps: 12000
+paths:
+  root_dir: .
+  log_dir: ./logs/
+  output_dir: checkpoints/workflow_recognition
+logging:
+  existing_experiment_policy: error
+  log_every_n_steps: 50
+  loss_keys:
+  - loss
+  - NextAction_Loss
+  - RobotPhase_Loss
+  - aux_rp_loss
+callbacks:
+  model_checkpoint:
+    _target_: src.callbacks.checkpoint.ExperimentCheckpoint
+    dirpath: checkpoints/workflow_recognition/checkpoints
+    every_n_train_steps: 2000
+  progress:
+    _target_: src.callbacks.training.TrainingProgress
+    log_every_n_steps: 50
+    loss_keys:
+    - loss
+    - NextAction_Loss
+    - RobotPhase_Loss
+    - aux_rp_loss
+  evaluation:
+    _target_: src.callbacks.evaluation.EvaluationArtifacts
+    directory: checkpoints/workflow_recognition
+  ema:
+    _target_: src.callbacks.training.EMACallback
+    decay: 0.999
+    warmup_steps: 1000

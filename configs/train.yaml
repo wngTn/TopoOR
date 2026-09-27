@@ -1,0 +1,18 @@
+# @package _global_
+
+defaults:
+    - _self_
+    - data: null
+    - model: null
+    - logger: wandb
+    - trainer: default
+    - paths: default
+    - logging: default
+    - callbacks: default
+    - hydra: default
+    - experiment: null
+
+experiment_name: "default"
+ckpt_path: null
+seed: 925
+temporal_window: 8
